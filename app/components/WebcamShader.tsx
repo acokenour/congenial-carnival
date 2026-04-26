@@ -6,18 +6,13 @@ import {
 } from "@basementstudio/shader-lab";
 import { useState } from "react";
 
-// This is the exact config you exported from the Shader Lab editor.
-// Phase 1: just get this rendering. No webcam yet — that comes next.
+// Your full exported composition from the editor.
 const config: ShaderLabConfig = {
   layers: [
     {
       blendMode: "normal",
       compositeMode: "filter",
-      maskConfig: {
-        invert: false,
-        mode: "multiply",
-        source: "luminance",
-      },
+      maskConfig: { invert: false, mode: "multiply", source: "luminance" },
       hue: 0,
       id: "8f621e7b-a310-46d7-a2ed-6c015473d2bc",
       kind: "effect",
@@ -56,11 +51,27 @@ const config: ShaderLabConfig = {
     {
       blendMode: "normal",
       compositeMode: "filter",
-      maskConfig: {
-        invert: false,
-        mode: "multiply",
-        source: "luminance",
+      maskConfig: { invert: false, mode: "multiply", source: "luminance" },
+      hue: 0,
+      id: "abfcafaa-accb-45e5-adf6-de5bd2fc2fcc",
+      kind: "source",
+      name: "Live Camera",
+      opacity: 1,
+      params: {
+        facingMode: "user",
+        mirror: true,
+        fitMode: "cover",
+        scale: 1,
+        offset: [0, 0],
       },
+      saturation: 1,
+      type: "live",
+      visible: true,
+    },
+    {
+      blendMode: "normal",
+      compositeMode: "filter",
+      maskConfig: { invert: false, mode: "multiply", source: "luminance" },
       hue: 0,
       id: "6bfa2084-cf57-4f8a-bb49-57cfa1c74b1c",
       kind: "effect",
@@ -88,11 +99,7 @@ const config: ShaderLabConfig = {
     {
       blendMode: "normal",
       compositeMode: "mask",
-      maskConfig: {
-        invert: false,
-        mode: "multiply",
-        source: "luminance",
-      },
+      maskConfig: { invert: false, mode: "multiply", source: "luminance" },
       hue: 0,
       id: "0e3136ed-a783-4527-888d-269caeb49a9f",
       kind: "source",
@@ -117,11 +124,7 @@ const config: ShaderLabConfig = {
     {
       blendMode: "normal",
       compositeMode: "filter",
-      maskConfig: {
-        invert: false,
-        mode: "multiply",
-        source: "luminance",
-      },
+      maskConfig: { invert: false, mode: "multiply", source: "luminance" },
       hue: 0,
       id: "99109d60-a6ce-44a8-9832-24905d6c14bb",
       kind: "effect",
@@ -154,11 +157,7 @@ const config: ShaderLabConfig = {
     {
       blendMode: "normal",
       compositeMode: "filter",
-      maskConfig: {
-        invert: false,
-        mode: "multiply",
-        source: "luminance",
-      },
+      maskConfig: { invert: false, mode: "multiply", source: "luminance" },
       hue: 0,
       id: "a924d323-7026-4b54-8738-355ef0d17009",
       kind: "source",
@@ -207,12 +206,8 @@ const config: ShaderLabConfig = {
       visible: true,
     },
   ],
-  timeline: {
-    duration: 8,
-    loop: true,
-    tracks: [],
-  },
-} as any; // editor schema is more complex than the published type
+  timeline: { duration: 8, loop: true, tracks: [] },
+} as any;
 
 export default function WebcamShader() {
   const [error, setError] = useState<string | null>(null);
@@ -252,8 +247,14 @@ export default function WebcamShader() {
       <ShaderLabComposition
         config={config}
         onRuntimeError={(message) => {
+          // Shader Lab calls this with `null` to CLEAR errors after
+          // successful init. Only treat real strings as actual errors.
+          if (message === null || message === undefined) {
+            setError(null);
+            return;
+          }
           console.error("Shader Lab runtime error:", message);
-          setError(String(message ?? "Unknown error (null)"));
+          setError(String(message));
         }}
       />
     </div>
