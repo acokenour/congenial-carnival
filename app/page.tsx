@@ -1,4 +1,5 @@
 import WebcamShader from "./components/WebcamShader";
+import SpotifyPlayer from "./components/SpotifyPlayer";
 
 export default function Home() {
   return (
@@ -28,6 +29,7 @@ export default function Home() {
         Outside = your raw webcam feed.
       </p>
       <WebcamShader />
+      <SpotifyPlayer />
     </main>
   );
 }
