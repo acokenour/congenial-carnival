@@ -1,6 +1,27 @@
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import WebcamShader from "./components/WebcamShader";
+import SpotifyPlayer from "./components/SpotifyPlayer";
 
-export default function Home() {
+type SearchParams = Promise<{ code?: string; state?: string; error?: string }>;
+
+export default async function Home({ searchParams }: { searchParams: SearchParams }) {
+  const { code, state, error } = await searchParams;
+
+  if (code || error) {
+    // The spotify_state cookie is readable here but may not survive the redirect
+    // to the callback route, so we pass it explicitly as stored_state.
+    const cookieStore = await cookies();
+    const storedState = cookieStore.get('spotify_state')?.value;
+
+    const params = new URLSearchParams();
+    if (code) params.set('code', code);
+    if (state) params.set('state', state);
+    if (error) params.set('error', error);
+    if (storedState) params.set('stored_state', storedState);
+    redirect(`/api/spotify/callback?${params.toString()}`);
+  }
+
   return (
     <main
       style={{
@@ -13,7 +34,7 @@ export default function Home() {
       }}
     >
       <h1 style={{ marginBottom: "1rem", fontWeight: 300 }}>
-        Webcam ASCII Spotlight
+        It's all blue baby
       </h1>
       <p
         style={{
@@ -24,10 +45,10 @@ export default function Home() {
           maxWidth: 500,
         }}
       >
-        Move your mouse over the video. Inside the circle = live ASCII art.
-        Outside = your raw webcam feed.
+        Good stuff all around
       </p>
       <WebcamShader />
+      <SpotifyPlayer />
     </main>
   );
 }
