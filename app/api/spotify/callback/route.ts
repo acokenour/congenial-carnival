@@ -10,7 +10,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL('/?spotify_error=access_denied', request.url));
   }
 
-  const storedState = request.cookies.get('spotify_state')?.value;
+  // Cookie may be absent when forwarded via page.tsx redirect; fall back to the
+  // stored_state param that page.tsx reads from the cookie and embeds in the URL.
+  const storedState =
+    request.cookies.get('spotify_state')?.value ?? searchParams.get('stored_state');
   if (!storedState || storedState !== state) {
     return NextResponse.redirect(new URL('/?spotify_error=state_mismatch', request.url));
   }
