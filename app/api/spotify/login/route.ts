@@ -15,8 +15,7 @@ export function GET(request: NextRequest) {
   }
 
   const { origin } = new URL(request.url);
-  const redirectUri =
-    process.env.SP_REDIRECT_URI ?? `${origin}/api/spotify/callback`;
+  const redirectUri = process.env.SP_REDIRECT_URI ?? origin;
 
   const state = Math.random().toString(36).substring(2, 18);
 
