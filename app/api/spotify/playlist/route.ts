@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const PLAYLIST_ID = '30pGvnBngJd4IEZI5Bktsy';
+const PLAYLIST_ID = '593VdNGOlo0zk9nzasKQAM'; 
 
 export async function GET(request: NextRequest) {
   const accessToken = request.cookies.get('spotify_access_token')?.value;
