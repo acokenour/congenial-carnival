@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import WebcamShader from "./components/WebcamShader";
 import SpotifyPlayer from "./components/SpotifyPlayer";
@@ -8,10 +9,16 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
   const { code, state, error } = await searchParams;
 
   if (code || error) {
+    // The spotify_state cookie is readable here but may not survive the redirect
+    // to the callback route, so we pass it explicitly as stored_state.
+    const cookieStore = await cookies();
+    const storedState = cookieStore.get('spotify_state')?.value;
+
     const params = new URLSearchParams();
     if (code) params.set('code', code);
     if (state) params.set('state', state);
     if (error) params.set('error', error);
+    if (storedState) params.set('stored_state', storedState);
     redirect(`/api/spotify/callback?${params.toString()}`);
   }
 
