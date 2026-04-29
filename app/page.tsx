@@ -34,7 +34,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
       }}
     >
       <h1 style={{ marginBottom: "1rem", fontWeight: 300 }}>
-        Webcam ASCII Spotlight
+        It's all blue baby
       </h1>
       <p
         style={{
@@ -45,8 +45,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
           maxWidth: 500,
         }}
       >
-        Move your mouse over the video. Inside the circle = live ASCII art.
-        Outside = your raw webcam feed.
+        Good stuff all around
       </p>
       <WebcamShader />
       <SpotifyPlayer />
