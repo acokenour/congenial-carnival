@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 const SCOPES = [
   'streaming',
@@ -8,14 +8,15 @@ const SCOPES = [
   'user-read-playback-state',
 ].join(' ');
 
-export function GET() {
+export function GET(request: NextRequest) {
   const clientId = process.env.SP_CLIENT_ID;
   if (!clientId) {
     return NextResponse.json({ error: 'SP_CLIENT_ID not configured' }, { status: 500 });
   }
 
+  const { origin } = new URL(request.url);
   const redirectUri =
-    process.env.SP_REDIRECT_URI ?? 'http://localhost:3000/api/spotify/callback';
+    process.env.SP_REDIRECT_URI ?? `${origin}/api/spotify/callback`;
 
   const state = Math.random().toString(36).substring(2, 18);
 
