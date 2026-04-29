@@ -1,7 +1,20 @@
+import { redirect } from 'next/navigation';
 import WebcamShader from "./components/WebcamShader";
 import SpotifyPlayer from "./components/SpotifyPlayer";
 
-export default function Home() {
+type SearchParams = Promise<{ code?: string; state?: string; error?: string }>;
+
+export default async function Home({ searchParams }: { searchParams: SearchParams }) {
+  const { code, state, error } = await searchParams;
+
+  if (code || error) {
+    const params = new URLSearchParams();
+    if (code) params.set('code', code);
+    if (state) params.set('state', state);
+    if (error) params.set('error', error);
+    redirect(`/api/spotify/callback?${params.toString()}`);
+  }
+
   return (
     <main
       style={{
