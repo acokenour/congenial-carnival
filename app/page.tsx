@@ -33,7 +33,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
         padding: "2rem",
       }}
     >
-      <h1 style={{ marginBottom: "1rem", fontWeight: 300 }}>
+      <h1 style={{ marginBottom: "1rem", fontWeight: 700 }}>
         It's all blue baby
       </h1>
       <p
