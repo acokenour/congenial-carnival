@@ -176,19 +176,23 @@ export default function SpotifyPlayer() {
       ) : (
         <div>
           <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', alignItems: 'center' }}>
-            {track && (
-              <button onClick={() => playerRef.current?.previousTrack()} style={pill('#191414')}>
-                ⏮ Prev
-              </button>
-            )}
+            <button
+              onClick={() => playerRef.current?.previousTrack()}
+              disabled={!track}
+              style={pill('#191414', !track)}
+            >
+              ⏮ Prev
+            </button>
             <button onClick={handleButton} style={pill('#1DB954')}>
               {playing ? '⏸ Pause' : track ? '▶ Resume' : '▶ Play from Playlist'}
             </button>
-            {track && (
-              <button onClick={() => playerRef.current?.nextTrack()} style={pill('#191414')}>
-                Next ⏭
-              </button>
-            )}
+            <button
+              onClick={() => playerRef.current?.nextTrack()}
+              disabled={!track}
+              style={pill('#191414', !track)}
+            >
+              Next ⏭
+            </button>
           </div>
           {track && (
             <p style={{ margin: '0.5rem 0 0', opacity: 0.65, fontSize: '0.82rem' }}>
@@ -206,7 +210,7 @@ export default function SpotifyPlayer() {
   );
 }
 
-function pill(bg: string): React.CSSProperties {
+function pill(bg: string, disabled = false): React.CSSProperties {
   return {
     background: bg,
     color: '#fff',
@@ -215,9 +219,10 @@ function pill(bg: string): React.CSSProperties {
     padding: '0.55rem 1.4rem',
     fontSize: '0.88rem',
     fontWeight: 600,
-    cursor: 'pointer',
+    cursor: disabled ? 'default' : 'pointer',
     textDecoration: 'none',
     display: 'inline-block',
     letterSpacing: '0.02em',
+    opacity: disabled ? 0.35 : 1,
   };
 }
