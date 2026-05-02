@@ -29,6 +29,8 @@ interface SpotifyPlayerInstance {
   addListener(event: string, callback: (data: unknown) => void): void;
   pause(): Promise<void>;
   resume(): Promise<void>;
+  previousTrack(): Promise<void>;
+  nextTrack(): Promise<void>;
 }
 
 export default function SpotifyPlayer() {
@@ -173,9 +175,21 @@ export default function SpotifyPlayer() {
         <p style={{ opacity: 0.45, fontSize: '0.82rem' }}>Connecting player…</p>
       ) : (
         <div>
-          <button onClick={handleButton} style={pill('#1DB954')}>
-            {playing ? '⏸ Pause' : track ? '▶ Resume' : '▶ Play from Playlist'}
-          </button>
+          <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', alignItems: 'center' }}>
+            {track && (
+              <button onClick={() => playerRef.current?.previousTrack()} style={pill('#191414')}>
+                ⏮ Prev
+              </button>
+            )}
+            <button onClick={handleButton} style={pill('#1DB954')}>
+              {playing ? '⏸ Pause' : track ? '▶ Resume' : '▶ Play from Playlist'}
+            </button>
+            {track && (
+              <button onClick={() => playerRef.current?.nextTrack()} style={pill('#191414')}>
+                Next ⏭
+              </button>
+            )}
+          </div>
           {track && (
             <p style={{ margin: '0.5rem 0 0', opacity: 0.65, fontSize: '0.82rem' }}>
               {track.name} — {track.artist}
